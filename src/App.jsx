@@ -1,35 +1,70 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [checked, setChecked] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
+  const handleChange = () => {
+    setChecked(!checked);
+  };
+
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    if (checked && !inputValue) {
+      setErrorMessage("La pregunta es obligatoria!!!");
+    } else {
+      setSubmitted(true);
+      setErrorMessage("");
+    }
+  }
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h1>Hola</h1>
+      <label>
+        <input type="checkbox" checked={checked} onChange={handleChange} />
+        ¿Te gustan los lenguajes de programación?
+      </label>
+
+      {checked && (
+        <div>
+          <input
+            type="text"
+            value={inputValue}
+            onChange={handleInputChange}
+            placeholder="¿Cuáles lenguajes de programación?"
+          />
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit}>
+        <button type="submit">Enviar</button>
+      </form>
+
+      {submitted && (
+        <div>
+          {checked ? (
+            inputValue ? (
+              <p>
+                Los lenguajes de programación que te gustan son: {inputValue}
+              </p>
+            ) : (
+              <p>{errorMessage}</p>
+            )
+          ) : (
+            <p>¡Qué lástima! 😞</p>
+          )}
+        </div>
+      )}
     </>
-  )
+  );
 }
 
-export default App
+export default App;
